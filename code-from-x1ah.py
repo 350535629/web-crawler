@@ -56,6 +56,7 @@ def start():
     mv_id = parser.mv_id()
     main = DownloadMV(mv_id)
     url = main.mv_url()
+    print(url)
     main.download(url)
 
 
