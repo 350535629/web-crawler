@@ -14,32 +14,32 @@ sys.setdefaultencoding('utf-8')
 #for texts in noveltext:
 #    print(texts)
 headers = {
-    "Host": "www.readnovel.com",
+    "Host": "hm.baidu.com",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.22 Safari/537.36 SE 2.X MetaSr 1.0",
     #Referer:http://www.readnovel.com/novel/341658.html
 }
-k=341648
-while k < 351608:
-    i = 1
-    while i<77:
+k=1
+while k < 200:
+    i = k*1000;
+    while i<k*1001:
         print k
-        url = 'http://www.readnovel.com/novel/{0}/{1}.html'.format(k,i)
+        url = 'http://www.bxwx8.org/text/{0}/{1}.html'.format(k,i)
         i+=1
         print(url)
         #print('test0')
-        wb_data = requests.get(url, headers=headers)
+        wb_data = requests.get(url,headers = headers)
         #print('test1')
         soup = BeautifulSoup(wb_data.text,'lxml')
         #print('test2')
-        article_text = soup.select('body > div.readcont > div.readcontcenter > div.bannerleft > div.zhangjie > p')
+        article_text = soup.select('body > div:nth-child(12)')
         #print('testover')
         if len(article_text) == 0:
             break
         print("yeah")
         headers["Referer"] = url
         #target.write(article_text)
-        wendao = 'temp%d.txt' % k
-        target = open(wendao,'a')
+        wendang = 'temp%d.txt' % i
+        target = open(wendang,'w')
         for texts in article_text:
     #        print (texts.text)
             target.write(texts.text)
@@ -48,6 +48,6 @@ while k < 351608:
         if i%10 == 0:
             time.sleep(3)
     k+=1
-    if k%10 == 0:
+    if k%5 == 0:
         time.sleep(3)
 print("over")
