@@ -6,12 +6,18 @@
 from bs4 import BeautifulSoup
 import requests
 import sys
+import os
 import threading
 import time
 import re
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
+
+dirname = str(time.time())
+print dirname
+os.mkdir('./%s'%dirname)
 
 headers = {
     "Host" : "book.zongheng.com",
@@ -67,7 +73,8 @@ def novelget(str_url,page):
             novel_title = soup.select('div.tc.txt > h1')#对小说名进行获取
             if novel_title[0]:#如果小说存在
                 chinesetitle = title.encode(encoding='gbk ',errors='strict')#将获取的小说名转码变为GBK中文码
-                wendang = './forth-novel/{0}/{1}.txt'.format(page, chinesetitle)
+
+                wendang = './{0}/{1}/{2}.txt'.format(dirname,page, chinesetitle)
                 target = open(wendang,'a')#打开用来存取小说的文档
                 target.write(novel_title[0].text)#将小说名字存入
                 target.write('\n')
@@ -82,12 +89,12 @@ def crawler(k):
     page = k
     if page:
         print page
+        os.mkdir('./{0}/{1}'.format(dirname, page))
         url = 'http://book.zongheng.com/quanben/c0/c0/b0/u1/p%d/v0/s1/t0/ALL.html' % page
         headers["Referer"] = url
         wb_ku = requests.get(url,headers = headers)
         soup = BeautifulSoup(wb_ku.text,'lxml')
         article_text = soup.select('ul.main_con > li > span.chap > a.fs14')
-
         for texts in article_text:
             print texts.get('title')
             print texts.get('href')
